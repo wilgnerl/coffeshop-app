@@ -6,6 +6,8 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 2rem 10rem;
+  position: sticky;
+  top: 0;
 
   img{
     width: 5.3rem;
@@ -30,10 +32,16 @@ export const LocationContainer = styled.div`
   line-height: 130%;
 `;
 
-export const CartContainer = styled.div`
+export const CartContainer = styled.button`
+  border: 0;
+  cursor: pointer;
   background-color: ${props => props.theme["yellow-300"]};
   color: ${props => props.theme["yellow-700"]};
   padding: 0.5rem;
   border-radius: 6px;
+
+  &:hover{
+    background-color: ${props => props.theme["yellow-500"]};
+  }
 
 `;

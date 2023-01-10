@@ -2,6 +2,9 @@ import styled from "styled-components";
 import backgroundImg from "../../assets/Background.svg";
 
 export const HomeContainer = styled.div`
+`;
+
+export const IntroContainer = styled.div`
   background-image: url(${backgroundImg});
   height: 34rem;
 
@@ -86,4 +89,59 @@ export const ItemContainer = styled.div`
       color: ${props => props.theme["gray-100"]};
     }
   }
+`;
+
+export const CoffeListContainer = styled.div`
+  margin-top: 2rem;
+  margin-left: 10rem;
+  margin-right: 10rem;
+
+  div{
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+export const CofferListHeaderContainer = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3.375rem;
+
+  h1{
+    font-family: "Baloo 2";
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 130%;
+  }
+
+  div{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+
+
+    button{
+      border: 1px solid ${props => props.theme["yellow-700"]};
+      cursor: pointer;
+      background-color: ${props => props.theme["gray-100"]};
+      color: ${props => props.theme["yellow-700"]};
+      border-radius: 100px;
+      padding: 6px 12px;
+      font-weight: 700;
+      font-size: 0.625rem;
+    }
+
+    button:hover{
+      background-color: ${props => props.theme["yellow-700"]};
+      color: ${props => props.theme["gray-100"]};
+
+    }
+  }
+`;
+
+export const CoffeListMainContainer = styled.main`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
 `;
