@@ -4,15 +4,14 @@ export const CheckoutContainer = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-
-
 `;
 
-export const CardsContainer = styled.div`
+export const CardsContainer = styled.form`
   display: flex;
   width: 100%;
   gap: 2rem;
   justify-content: center;
+  flex-wrap: wrap;
 `;
 
 
@@ -66,7 +65,7 @@ export const CardFormContainer = styled.div`
     
   }
 
-  form{
+  main{
     width: 100%;
     display: flex;
     flex-direction: column;

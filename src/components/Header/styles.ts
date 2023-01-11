@@ -44,4 +44,20 @@ export const CartContainer = styled.button`
     background-color: ${props => props.theme["yellow-500"]};
   }
 
+  span {
+    position: absolute;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    top: 1.5rem;
+    right: 9.5rem;
+    color: ${props => props.theme["gray-100"]};
+    background-color: ${props => props.theme["yellow-700"]};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
 `;

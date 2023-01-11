@@ -7,10 +7,17 @@ import {
 	CardFormContainer, 
 	CardsContainer, 
 	CartContainer, FormContainer, PaymentMethodButtonsContainer, PaymentMethodContainer } from "./styles";
+import { useNavigate } from "react-router-dom";
 
 export function Checkout(){
+	const navigate = useNavigate();
+
+	function handleSubmit(){
+		navigate("/sucess");
+	}
+
 	return(
-		<CardsContainer>
+		<CardsContainer onSubmit={handleSubmit}>
 			<FormContainer>
 				<span>Complete seu pedido</span>
 				<CardFormContainer>
@@ -23,7 +30,7 @@ export function Checkout(){
 							<span>Informe o endereço onde deseja receber seu pedido</span>
 						</div>
 					</header>
-					<form>
+					<main>
 						<input type="text" className="cep" placeholder="CEP"/>
 						<input type="text" className="street" placeholder="Rua"/>
 						<div>
@@ -35,7 +42,7 @@ export function Checkout(){
 							<input type="text" className="cidade" placeholder="Cidade"/>
 							<input type="text" className="uf" placeholder="UF"/>
 						</div>
-					</form>
+					</main>
 				</CardFormContainer>
 				<PaymentMethodContainer>
 					<header>
@@ -84,7 +91,7 @@ export function Checkout(){
 							<span>R$ 29,70</span>
 						</div>
 					</BillingContainer>
-					<ButtonCardCartContainer>Confirmar pedido</ButtonCardCartContainer>
+					<ButtonCardCartContainer type="submit">Confirmar pedido</ButtonCardCartContainer>
 				</CardCartContainer>
 					
 			</CartContainer>
