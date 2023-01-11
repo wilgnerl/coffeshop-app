@@ -203,6 +203,7 @@ export const CardCartContainer = styled.div`
   margin-top: 0.9375rem;
   background-color: ${props => props.theme["gray-200"]};
   padding: 2.5rem 2.5rem 2.5rem;
+  border-radius: 6px 36px;
 
 `;
 
