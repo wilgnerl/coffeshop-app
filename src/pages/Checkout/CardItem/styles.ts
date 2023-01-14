@@ -94,6 +94,10 @@ export const CounterContainer = styled.div`
     border: 0;
     width: 1.5rem;
     background-color: transparent;
-    
+    cursor: pointer;
+  }
+
+  button:hover{
+    color: ${props => props.theme["purple-700"]};
   }
 `;

@@ -8,17 +8,45 @@ import {
 	CardsContainer, 
 	CartContainer, FormContainer, PaymentMethodButtonsContainer, PaymentMethodContainer } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { ShoppingCartContext } from "../../contexts/CartContext";
 
 export function Checkout(){
+	const { cartList } = useContext(ShoppingCartContext);
+	const [totalItems, setTotalItems] = useState<number>(0);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!cartList) {
+			setTotalItems(0);
+		} else {
+			calculateTotalItems();
+		}
+	}, [cartList]);
+
+	function calculateTotalItems() {
+		setTotalItems(
+			cartList
+				.map((coffee) => coffee.price * coffee.amount)
+				.reduce((total, coffee) => total + coffee, 0)
+		);
+	}
+
+	function handleTotal(){
+		calculateTotalItems();
+	}
+	
+	const deliveryPrice = 3.99;
+	const totalOfPurchase = deliveryPrice + totalItems;
 
 	function handleSubmit(){
 		navigate("/sucess");
 	}
 
+
 	return(
 		<CardsContainer onSubmit={handleSubmit}>
-			<FormContainer>
+			<FormContainer id="confirmOrder">
 				<span>Complete seu pedido</span>
 				<CardFormContainer>
 					<header>
@@ -74,24 +102,30 @@ export function Checkout(){
 			<CartContainer>
 				<h1>Cafes selecionado</h1>
 				<CardCartContainer>
-					<CardItem />
-					<CardItem />
-					<CardItem />
+					{cartList.map((coffe) => {
+						return(
+							<CardItem 
+								coffe={coffe} 
+								key={coffe.id}
+								recalculateTotal={handleTotal}
+							/>
+						);
+					})}
 					<BillingContainer>
 						<div>
 							<span>Total de itens</span>
-							<span>R$ 29,70</span>
+							<span>R$ {totalItems.toFixed(2).replace(".", ",")}</span>
 						</div>
 						<div>
 							<span>Entrega</span>
-							<span>R$ 29,70</span>
+							<span>R$ {deliveryPrice.toFixed(2).replace(".", ",")}</span>
 						</div>
 						<div>
 							<span>Total</span>
-							<span>R$ 29,70</span>
+							<span>R$ {totalOfPurchase.toFixed(2).replace(".", ",")}</span>
 						</div>
 					</BillingContainer>
-					<ButtonCardCartContainer type="submit">Confirmar pedido</ButtonCardCartContainer>
+					<ButtonCardCartContainer type="submit" form="confirmOrder">Confirmar pedido</ButtonCardCartContainer>
 				</CardCartContainer>
 					
 			</CartContainer>

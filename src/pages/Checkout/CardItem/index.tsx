@@ -1,25 +1,58 @@
 import { Minus, Plus, Trash } from "phosphor-react";
-import coffeImg from "../../../assets/coffes/expresso.svg";
-import { ActionContainer, ButtonsContainer, CardItemContainer, CounterContainer, RemoveButton } from "./styles";
+import { useContext, useState } from "react";
+import { ShoppingCartContext } from "../../../contexts/CartContext";
+import { 
+	ActionContainer, 
+	ButtonsContainer, CardItemContainer, CounterContainer, RemoveButton } from "./styles";
 
+interface CoffeAttributes{
+	id: string;
+  image: string;
+  name: string;
+  price: number;
+  amount: number;
+}
+interface CardProps{
+	coffe: CoffeAttributes
+	recalculateTotal: () => void
+}
 
-export function CardItem(){
+export function CardItem({ coffe, recalculateTotal}: CardProps){
+	const { changeCartItem, removeItemOfCart } = useContext(ShoppingCartContext);
+	const [amount, setAmount] = useState<number>(1);
+	
+	function increaseCoffeAmount(){
+		changeCartItem(coffe.id, "Increase");
+		setAmount((state) => state + 1);
+		recalculateTotal();
+	}
+
+	function decreaseCoffeAmount(){
+		changeCartItem(coffe.id, "Decrease");
+		setAmount((state) => state - 1);
+		recalculateTotal();
+	}
+
+	function handleRemoveItemOfCart(){
+		removeItemOfCart(coffe);
+	}
+
 	return(
 		<CardItemContainer>
-			<img src={coffeImg} alt="" />
+			<img src={coffe.image}/>
 			<ActionContainer>
-				<span>Expresso tradicional</span>
+				<span>{coffe.name}</span>
 				<ButtonsContainer>
 					<CounterContainer>
-						<button>
+						<button onClick={decreaseCoffeAmount} type="button">
 							<Minus size={14} weight="bold"/>
 						</button>
-						<span>1</span>
-						<button>
+						<span>{amount}</span>
+						<button onClick={increaseCoffeAmount} type="button">
 							<Plus size={14} weight="bold"/>
 						</button>
 					</CounterContainer>
-					<RemoveButton>
+					<RemoveButton onClick={handleRemoveItemOfCart}>
 						<div>
 							<Trash size={16}/>
 						</div>
@@ -28,7 +61,7 @@ export function CardItem(){
 				</ButtonsContainer>
 				
 			</ActionContainer>
-			<span>R$ 9,90</span>
+			<span>{(coffe.price * amount).toFixed(2).replace(".", ",")}</span>
 		</CardItemContainer>
 	);
 }

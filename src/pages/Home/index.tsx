@@ -10,6 +10,7 @@ import {
 import coffeImg from "../../assets/coffe.svg";
 import { Coffee, Timer, ShoppingCart, Package } from "phosphor-react";
 import { Card } from "./Card";
+import { coffeeList } from "../../data/coffeList";
 
 export function Home(){
 	return(
@@ -63,20 +64,11 @@ export function Home(){
 				</CofferListHeaderContainer>
 				
 				<CoffeListMainContainer>
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
-					<Card />
+					{coffeeList.map(coffe => {
+						return(
+							<Card key={coffe.id} coffe={coffe}/>
+						);
+					})}
 				</CoffeListMainContainer>
 			</CoffeListContainer>
 		</HomeContainer>
