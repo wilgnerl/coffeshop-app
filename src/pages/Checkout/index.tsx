@@ -1,20 +1,58 @@
 import { CardItem } from "./CardItem";
-import { MapPin, CurrencyDollar, CreditCard, Bank, Money } from "phosphor-react";
 import { 
 	BillingContainer,
 	ButtonCardCartContainer,
 	CardCartContainer, 
-	CardFormContainer, 
 	CardsContainer, 
-	CartContainer, FormContainer, PaymentMethodButtonsContainer, PaymentMethodContainer } from "./styles";
+	CartContainer  } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../../contexts/CartContext";
+import { DataForm } from "./DataForm";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as zod from "zod";
+
+const dataFormValidationSchema = zod.object({
+	cep: zod.string().min(9, "O CEP Deve ter 13 caracteres"),
+	rua: zod.string(),
+	numero: zod.string().transform((value) => Number(value)),
+	complemento: zod.string(),
+	bairro: zod.string(),
+	cidade: zod.string(),
+	uf: zod.string().max(2).min(2),
+});
+
+type dataForm = zod.infer<typeof dataFormValidationSchema>
+
+interface FormFields{
+	cep: string,
+	rua: string,
+	numero: number | string,
+	complemento: string,
+	bairro: string,
+	cidade: string,
+	uf: string,
+}
 
 export function Checkout(){
-	const { cartList } = useContext(ShoppingCartContext);
+	const { cartList, createNewDataFormCart, resetCartList } = useContext(ShoppingCartContext);
 	const [totalItems, setTotalItems] = useState<number>(0);
 	const navigate = useNavigate();
+	const dataForm = useForm<dataForm>({
+		resolver: zodResolver(dataFormValidationSchema),
+		defaultValues:{
+			cep: "",
+			rua: "",
+			numero: 0,
+			complemento: "",
+			bairro: "",
+			cidade: "",
+			uf: "",
+		}
+	});
+
+	const { handleSubmit, reset} = dataForm;
 
 	useEffect(() => {
 		if (!cartList) {
@@ -39,65 +77,21 @@ export function Checkout(){
 	const deliveryPrice = 3.99;
 	const totalOfPurchase = deliveryPrice + totalItems;
 
-	function handleSubmit(){
+	function handleCreateNewForm(data: FormFields){
+		createNewDataFormCart(data);
 		navigate("/sucess");
+		resetCartList();
+		reset();
 	}
 
 
 	return(
-		<CardsContainer onSubmit={handleSubmit}>
-			<FormContainer id="confirmOrder">
-				<span>Complete seu pedido</span>
-				<CardFormContainer>
-					<header>
-						<div>
-							<MapPin size={22}/>
-						</div>
-						<div>
-							<h1>Endereço de Entrega</h1>
-							<span>Informe o endereço onde deseja receber seu pedido</span>
-						</div>
-					</header>
-					<main>
-						<input type="text" className="cep" placeholder="CEP"/>
-						<input type="text" className="street" placeholder="Rua"/>
-						<div>
-							<input type="number" className="numero" placeholder="Numero"/>
-							<input type="text" className="complemento" placeholder="Complemento"/>
-						</div>
-						<div>
-							<input type="text" className="bairro" placeholder="Bairro"/>
-							<input type="text" className="cidade" placeholder="Cidade"/>
-							<input type="text" className="uf" placeholder="UF"/>
-						</div>
-					</main>
-				</CardFormContainer>
-				<PaymentMethodContainer>
-					<header>
-						<div>
-							<CurrencyDollar weight="bold" size={22}/>
-						</div>
-						<div>
-							<h1>Pagamento</h1>
-							<span>O pagamento é feito na entrega. Escolha a forma que deseja pagar</span>
-						</div>
-					</header>
-					<PaymentMethodButtonsContainer>
-						<button>
-							<div><CreditCard size={16}/></div>
-								Cartao de credito
-						</button>
-						<button>
-							<div><Bank size={16}/></div>
-								Cartao de debito
-						</button>
-						<button>
-							<div><Money size={16}/></div>
-								Dinheiro
-						</button>
-					</PaymentMethodButtonsContainer>
-				</PaymentMethodContainer>
-			</FormContainer>
+		<CardsContainer onSubmit={handleSubmit(handleCreateNewForm)} id="confirmOrder">
+			
+			<FormProvider {...dataForm}>
+				<DataForm />
+			</FormProvider>
+			
 
 			<CartContainer>
 				<h1>Cafes selecionado</h1>
@@ -129,6 +123,7 @@ export function Checkout(){
 				</CardCartContainer>
 					
 			</CartContainer>
+
 		</CardsContainer>
 			
 	);

@@ -7,8 +7,14 @@ import {
 	InfoTextContainer, 
 	OrderInfoContainer, SucessContainer, SucessHeaderContainer, SucessMainContainer } from "./styles";
 import { MapPin, CurrencyDollar, Timer, } from "phosphor-react";
+import { ShoppingCartContext } from "../../contexts/CartContext";
+import { useContext } from "react";
 
 export function Sucess(){
+	const { formData, paymentType } = useContext(ShoppingCartContext);
+
+	const { paymentType: Payment} = paymentType;
+
 	return(
 		<SucessContainer>
 			<SucessHeaderContainer>
@@ -22,8 +28,8 @@ export function Sucess(){
 							<MapPin size={16} weight="fill"/>
 						</InfoIcon1Container>
 						<InfoTextContainer>
-							<span>Entrega em <strong>Rua João Daniel Martinelli, 102</strong></span>
-							<span>Farrapos - Porto Alegre, RS</span>
+							<span>Entrega em <strong>{formData.rua}, {formData.numero}</strong></span>
+							<span>{formData.bairro} - {formData.cidade}, {formData.uf}</span>
 						</InfoTextContainer>
 					</InfoContainer>
 					<InfoContainer>
@@ -41,7 +47,15 @@ export function Sucess(){
 						</InfoIcon3Container>
 						<InfoTextContainer>
 							<span>Pagamento na entrega</span>
-							<strong>Cartão de Crédito</strong>
+							{
+								(Payment === "Debito" && (<strong>Cartão de Debito</strong>))	
+							}
+							{
+								(Payment === "Credito" && (<strong>Cartão de Credito</strong>))	
+							}
+							{
+								(Payment === "Dinheiro" && (<strong>Dinheiro</strong>))	
+							}
 						</InfoTextContainer>
 					</InfoContainer>
 				</OrderInfoContainer>
