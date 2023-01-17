@@ -115,29 +115,6 @@ export const CofferListHeaderContainer = styled.header`
     line-height: 130%;
   }
 
-  div{
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-
-
-    button{
-      border: 1px solid ${props => props.theme["yellow-700"]};
-      cursor: pointer;
-      background-color: ${props => props.theme["gray-100"]};
-      color: ${props => props.theme["yellow-700"]};
-      border-radius: 100px;
-      padding: 6px 12px;
-      font-weight: 700;
-      font-size: 0.625rem;
-    }
-
-    button:hover{
-      background-color: ${props => props.theme["yellow-700"]};
-      color: ${props => props.theme["gray-100"]};
-
-    }
-  }
 `;
 
 export const CoffeListMainContainer = styled.main`

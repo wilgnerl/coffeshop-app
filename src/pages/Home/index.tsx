@@ -13,6 +13,8 @@ import { Card } from "./Card";
 import { coffeeList } from "../../data/coffeList";
 
 export function Home(){
+	
+
 	return(
 		<HomeContainer>
 			<IntroContainer>
@@ -53,14 +55,6 @@ export function Home(){
 			<CoffeListContainer>
 				<CofferListHeaderContainer>
 					<h1>Nossos Cafés</h1>
-
-					<div>
-						<button>Tradicional</button>
-						<button>Especial</button>
-						<button>Com leite</button>
-						<button>Alcoolico</button>
-						<button>Gelado</button>
-					</div>
 				</CofferListHeaderContainer>
 				
 				<CoffeListMainContainer>
