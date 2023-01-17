@@ -1,13 +1,10 @@
-import { createContext, ReactNode, useState } from "react";
-
-interface CoffeAttributes{
-	id: string;
-  image: string;
-  name: string;
-  price: number;
-  amount: number
-}
-
+import { createContext, ReactNode, useReducer, useState } from "react";
+import { 
+	changeCartItemAction, 
+	removeItemOfCartAction, 
+	resetCartListAction, 
+	updateCartListAction } from "../reducers/actions";
+import { cartReducer, CoffeAttributes } from "../reducers/reducer";
 interface FormFields{
 	cep: string,
 	rua: string,
@@ -17,11 +14,9 @@ interface FormFields{
 	cidade: string,
 	uf: string,
 }
-
 interface PaymentMethod{
 	paymentType: "Debito" | "Credito" | "Dinheiro"
 }
-
 interface ShoppingCartContextType{
   cartList: CoffeAttributes[],
   formData: FormFields
@@ -41,7 +36,12 @@ interface ShoppingCartContextProvidesProps {
 }
 
 export function ShoppingCartContextProvider({ children }: ShoppingCartContextProvidesProps){
-	const [cartList, setCartList] = useState<CoffeAttributes[]>([]);
+	const [cartState, dispatch] = useReducer(cartReducer, {
+		cartList: []
+	});
+
+	const { cartList } = cartState;
+
 	const [paymentType, setPaymentType] = useState<PaymentMethod>({
 		paymentType: "Credito"
 	});
@@ -56,42 +56,15 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
 	});
 
 	function updateCartList(coffeToAdd: CoffeAttributes){
-		const coffeExists = cartList.findIndex((item) => item.id === coffeToAdd.id);
-
-		if(coffeExists < 0){
-			setCartList([...cartList, coffeToAdd]);
-		} else{
-			const newCart = cartList;
-			newCart[coffeExists].amount += coffeToAdd.amount;
-			setCartList(newCart);
-		}
+		dispatch(updateCartListAction(coffeToAdd));
 	}
 
 	function changeCartItem(coffeId: string, type: "Increase" | "Decrease"){
-		const coffeExists = cartList.findIndex((coffee) => {
-			return coffeId === coffee.id;
-		});
-		const newCart = cartList;
-		if (coffeExists >= 0) {
-			
-			if (type === "Increase") {
-				newCart[coffeExists].amount = newCart[coffeExists].amount + 1;
-				setCartList(newCart);
-			} else if (type === "Decrease" && newCart[coffeExists].amount > 1) {
-				newCart[coffeExists].amount = newCart[coffeExists].amount - 1;
-				setCartList(newCart);
-			}
-			
-			
-		}
-		
+		dispatch(changeCartItemAction(coffeId, type));
 	}
 
 	function removeItemOfCart(coffeToRemove: CoffeAttributes){
-
-		const newCart = cartList.filter((coffe) => coffe.id !== coffeToRemove.id);
-
-		setCartList(newCart);
+		dispatch(removeItemOfCartAction(coffeToRemove));
 	}
 
 	function createNewDataFormCart(data: FormFields){
@@ -103,7 +76,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
 	}
 
 	function resetCartList(){
-		setCartList([]);
+		dispatch(resetCartListAction());
 	}
 	return (
 		<ShoppingCartContext.Provider 
